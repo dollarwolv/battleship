@@ -69,4 +69,12 @@ test("Gameboard correctly determines if all ships are sunk", () => {
   gameboard.receiveAttack(4, 4);
 
   expect(gameboard.allSunk()).toBe(true);
+  gameboard.placeShip(5, 8, 4, 4);
+  expect(gameboard.allSunk()).toBe(false);
+  gameboard.receiveAttack(5, 4);
+  gameboard.receiveAttack(6, 4);
+  gameboard.receiveAttack(7, 4);
+  expect(gameboard.allSunk()).toBe(false);
+  gameboard.receiveAttack(8, 4);
+  expect(gameboard.allSunk()).toBe(true);
 });

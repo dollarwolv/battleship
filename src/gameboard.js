@@ -62,6 +62,15 @@ class Gameboard {
     if (startX - endX !== 0) return Math.abs(startX - endX) + 1;
     else return Math.abs(startY - endY) + 1;
   }
+
+  allSunk() {
+    for (let ship of this.ships) {
+      if (!ship.sunk) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 module.exports = { Gameboard };
