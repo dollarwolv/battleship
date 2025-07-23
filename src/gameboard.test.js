@@ -44,3 +44,29 @@ test("Gameboard does not allow ships to be placed over one another", () => {
   }).toThrow("Ships cannot occupy the same spot.");
   expect(gameboard.ships.length).toBe(1);
 });
+
+test("Gameboard sends hit to the correct ship", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(2, 4, 4, 4);
+  gameboard.placeShip(5, 7, 4, 4);
+  gameboard.receiveAttack(3, 4);
+  expect(gameboard.ships[0].hits).toBe(1);
+});
+
+test("Gameboard adds 'X' if there's no ship", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(2, 4, 4, 4);
+  gameboard.placeShip(5, 7, 4, 4);
+  gameboard.receiveAttack(3, 5);
+  expect(gameboard.board[3][5]).toBe("X");
+});
+
+test("Gameboard correctly determines if all ships are sunk", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(2, 4, 4, 4);
+  gameboard.receiveAttack(2, 4);
+  gameboard.receiveAttack(3, 4);
+  gameboard.receiveAttack(4, 4);
+
+  expect(gameboard.allSunk()).toBe(true);
+});

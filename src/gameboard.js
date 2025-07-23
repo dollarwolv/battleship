@@ -49,6 +49,15 @@ class Gameboard {
     this.board = boardCopy;
   }
 
+  receiveAttack(x, y) {
+    if (this.board[x][y] instanceof Ship) {
+      this.board[x][y].hit();
+      this.board[x][y].isSunk();
+    } else {
+      this.board[x][y] = "X";
+    }
+  }
+
   _calculateShipLength(startX, endX, startY, endY) {
     if (startX - endX !== 0) return Math.abs(startX - endX) + 1;
     else return Math.abs(startY - endY) + 1;
