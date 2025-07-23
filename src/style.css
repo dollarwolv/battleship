@@ -1,0 +1,14 @@
+#game-container {
+  display: grid;
+  width: 500px;
+  height: 500px;
+  grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+}
+
+.square {
+  background-color: aqua;
+  /* width: 20px;
+  height: 20px; */
+  box-sizing: border-box;
+  border: 1px solid black;
+}

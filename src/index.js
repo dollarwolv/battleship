@@ -1,7 +1,16 @@
-function sum(a, b) {
-  //schwanz
-  return a + b;
+import { Player } from "./player";
+import { DOMManager } from "./dom";
+import "./style.css";
+
+// import { Gameboard } from "./gameboard";
+
+class GameManager {
+  constructor() {
+    this.player = new Player("player");
+    this.computer = new Player("computer");
+    this.dom = new DOMManager();
+    this.dom.renderGameBoard();
+  }
 }
 
-// there is a fish in the water
-module.exports = sum;
+const manage = new GameManager();
