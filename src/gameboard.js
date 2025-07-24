@@ -64,6 +64,7 @@ class Gameboard {
       return [true, false, this.board[x][y].location];
     } else {
       this.board[x][y] = "X";
+      this.hitSquares.push([x, y]);
       return [false, false, this.board[x][y].location];
     }
   }

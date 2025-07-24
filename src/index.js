@@ -25,7 +25,7 @@ class GameManager {
     this._makeComputerMove();
   }
 
-  handleSquareClick = (row, col, target) => {
+  handleSquareClick(row, col, target) {
     const hit = target.gameboard.receiveAttack(row, col);
     const [isHit, isSunk, location] = hit;
 
@@ -55,7 +55,7 @@ class GameManager {
       this.dom.displayWin(this.player);
     else if (target.gameboard.allSunk() && target.type === "player")
       this.dom.displayWin(this.computer);
-  };
+  }
 
   _makePlayerShip(rowStart, rowEnd, colStart, colEnd) {
     this.player.gameboard.placeShip(rowStart, rowEnd, colStart, colEnd);
@@ -81,15 +81,24 @@ class GameManager {
   _makeComputerMove() {
     const row = this._getRandomInt(9);
     const col = this._getRandomInt(9);
-    setTimeout(
-      this.handleSquareClick(row, col, this.player),
-      Math.random() * 5,
-    );
+
+    if (
+      !this.computer.gameboard.hitSquares.some(
+        (coord) => coord[0] === row && coord[1] === col,
+      )
+    ) {
+      setTimeout(
+        this.handleSquareClick(row, col, this.player),
+        Math.random() * 5000,
+      );
+    } else this._makeComputerMove();
   }
 
   _getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+  runGame() {}
 }
 
 const manage = new GameManager();
