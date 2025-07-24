@@ -1,9 +1,10 @@
 class Ship {
-  constructor(length) {
+  constructor(length, location) {
     this.length = length;
     this.hits = 0;
     this.sunk = false;
     this.shipID = this.makeID();
+    this.location = location;
   }
 
   hit() {

@@ -27,6 +27,7 @@ class Gameboard {
     this.numberOfShips += 1;
     const ship = new Ship(
       this._calculateShipLength(startX, endX, startY, endY),
+      [startX, endX, startY, endY],
     );
 
     // place ship
@@ -52,11 +53,12 @@ class Gameboard {
   receiveAttack(x, y) {
     if (this.board[x][y] instanceof Ship) {
       this.board[x][y].hit();
-      this.board[x][y].isSunk();
-      return true;
+      const sunk = this.board[x][y].isSunk();
+      const location = this.board[x][y].location;
+      return [true, sunk, location];
     } else {
       this.board[x][y] = "X";
-      return false;
+      return [false, false, this.board[x][y].location];
     }
   }
 

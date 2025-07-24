@@ -26,7 +26,30 @@ class GameManager {
 
   handleSquareClick = (row, col, target) => {
     const hit = target.gameboard.receiveAttack(row, col);
-    this.dom.updateSquare(target, row, col, hit);
+    const [isHit, isSunk, location] = hit;
+
+    // update square to show hit marker
+    this.dom.updateSquare(target, row, col, isHit);
+
+    // render ship if whole ship was sunk
+    if (isSunk && target.type === "computer") {
+      const [rowStart, rowEnd, colStart, colEnd] = location;
+      this.dom.renderShip(
+        rowStart,
+        rowEnd,
+        colStart,
+        colEnd,
+        this.player.gameboard._calculateShipLength(
+          rowStart,
+          rowEnd,
+          colStart,
+          colEnd,
+        ),
+        target,
+      );
+    }
+
+    // win logic
     if (target.gameboard.allSunk() && target.type === "computer")
       this.dom.displayWin(this.player);
     else if (target.gameboard.allSunk() && target.type === "player")
