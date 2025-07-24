@@ -18,12 +18,15 @@ class GameManager {
     this._makeShip(6, 9, 4, 4, this.player);
     this._makeShip(5, 5, 2, 3, this.player);
     this._makeShip(2, 2, 0, 4, this.player);
-    this.dom.renderGameBoard(this.handleSquareClick, this.computer);
+    this.dom.renderGameBoard(this.handleSquareClick.bind(this), this.computer);
+    this._makeShip(3, 3, 0, 4, this.computer);
+    this._makeShip(0, 1, 5, 5, this.computer);
+    this._makeShip(6, 9, 8, 8, this.computer);
   }
 
-  handleSquareClick = (row, col) => {
-    const hit = this.player.gameboard.receiveAttack(row, col);
-    this.dom.updateSquare(row, col, hit);
+  handleSquareClick = (row, col, target) => {
+    const hit = target.gameboard.receiveAttack(row, col);
+    this.dom.updateSquare(target, row, col, hit);
   };
 
   _makeShip(rowStart, rowEnd, colStart, colEnd, target) {
