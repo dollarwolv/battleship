@@ -16,7 +16,7 @@ class DOMManager {
         square.dataset.col = j;
         square.dataset.ship = false;
         square.addEventListener("click", () => {
-          handleSquareClick(i, j, target);
+          if (target.type === "computer") handleSquareClick(i, j, target);
         });
         gameContainer.appendChild(square);
       }
@@ -61,6 +61,12 @@ class DOMManager {
       square.innerHTML = `<img src="/img/fire.gif" class="hit-overlay" />`;
     else
       square.innerHTML = `<img src="/img/water_hit.jpg" class="hit-overlay" />`;
+  }
+
+  displayWin(target) {
+    const winDiv = document.createElement("div");
+    winDiv.innerHTML = `yay ${target.type} won`;
+    document.body.append(winDiv);
   }
 }
 
