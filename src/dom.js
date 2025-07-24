@@ -19,6 +19,36 @@ class DOMManager {
 
     document.body.append(gameContainer);
   }
+
+  renderShip(xStart, xEnd, yStart, yEnd, length) {
+    let partIndex = 1;
+    if (xStart !== xEnd) {
+      // loop through xs
+      for (let i = xStart; i <= xEnd; i++) {
+        const square = this._getSquare(i, yStart);
+
+        square.style.backgroundImage = `url("/img/ship_${length}_rotated/image_part_00${partIndex}.jpg")`;
+        square.style.backgroundSize = "cover";
+        square.style.backgroundRepeat = "no-repeat";
+        square.style.backgroundPosition = "center";
+        partIndex++;
+      }
+    } else {
+      // loop through ys
+      for (let i = yStart; i <= yEnd; i++) {
+        const square = this._getSquare(xStart, i);
+        square.style.backgroundImage = `url("/img/ship_${length}/image_part_00${partIndex}.jpg")`;
+        square.style.backgroundSize = "cover";
+        square.style.backgroundRepeat = "no-repeat";
+        square.style.backgroundPosition = "center";
+        partIndex++;
+      }
+    }
+  }
+
+  _getSquare(row, col) {
+    return document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  }
 }
 
 export { DOMManager };

@@ -10,6 +10,10 @@ class GameManager {
     this.computer = new Player("computer");
     this.dom = new DOMManager();
     this.dom.renderGameBoard();
+
+    // just quickly testing this
+    this.dom.renderShip(4, 4, 4, 6, 3);
+    this.dom.renderShip(2, 3, 2, 2, 2);
   }
 }
 
