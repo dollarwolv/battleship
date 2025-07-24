@@ -22,6 +22,7 @@ class GameManager {
     this._makeComputerShip(3, 3, 0, 4);
     this._makeComputerShip(0, 1, 5, 5);
     this._makeComputerShip(6, 9, 8, 8);
+    this._makeComputerMove();
   }
 
   handleSquareClick = (row, col, target) => {
@@ -75,6 +76,19 @@ class GameManager {
 
   _makeComputerShip(rowStart, rowEnd, colStart, colEnd) {
     this.computer.gameboard.placeShip(rowStart, rowEnd, colStart, colEnd);
+  }
+
+  _makeComputerMove() {
+    const row = this._getRandomInt(9);
+    const col = this._getRandomInt(9);
+    setTimeout(
+      this.handleSquareClick(row, col, this.player),
+      Math.random() * 5,
+    );
+  }
+
+  _getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 }
 
