@@ -6,6 +6,7 @@ class Gameboard {
     this.maxShips = 5;
     this.numberOfShips = 0;
     this.ships = [];
+    this.hitSquares = [];
   }
 
   placeShip(startX, endX, startY, endY) {
@@ -52,10 +53,15 @@ class Gameboard {
 
   receiveAttack(x, y) {
     if (this.board[x][y] instanceof Ship) {
-      this.board[x][y].hit();
-      const sunk = this.board[x][y].isSunk();
-      const location = this.board[x][y].location;
-      return [true, sunk, location];
+      console.log(this.hitSquares);
+      if (!this.hitSquares.some((coord) => coord[0] === x && coord[1] === y)) {
+        this.board[x][y].hit();
+        this.hitSquares.push([x, y]);
+        const sunk = this.board[x][y].isSunk();
+        const location = this.board[x][y].location;
+        return [true, sunk, location];
+      }
+      return [true, false, this.board[x][y].location];
     } else {
       this.board[x][y] = "X";
       return [false, false, this.board[x][y].location];
