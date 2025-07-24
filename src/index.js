@@ -9,12 +9,35 @@ class GameManager {
     this.player = new Player("player");
     this.computer = new Player("computer");
     this.dom = new DOMManager();
-    this.dom.renderGameBoard();
+  }
 
-    // just quickly testing this
-    this.dom.renderShip(4, 4, 4, 6, 3);
-    this.dom.renderShip(2, 3, 2, 2, 2);
+  setupGame() {
+    this.dom.renderGameBoard(this.handleSquareClick, this.player);
+    this._makeShip(4, 6, 5, 5, this.player);
+    this._makeShip(1, 2, 5, 5, this.player);
+    this._makeShip(6, 9, 4, 4, this.player);
+    this._makeShip(5, 5, 2, 3, this.player);
+    this._makeShip(2, 2, 0, 4, this.player);
+    this.dom.renderGameBoard(this.handleSquareClick, this.computer);
+  }
+
+  handleSquareClick = (row, col) => {
+    const hit = this.player.gameboard.receiveAttack(row, col);
+    this.dom.updateSquare(row, col, hit);
+  };
+
+  _makeShip(rowStart, rowEnd, colStart, colEnd, target) {
+    target.gameboard.placeShip(rowStart, rowEnd, colStart, colEnd);
+    this.dom.renderShip(
+      rowStart,
+      rowEnd,
+      colStart,
+      colEnd,
+      target.gameboard._calculateShipLength(rowStart, rowEnd, colStart, colEnd),
+      target,
+    );
   }
 }
 
 const manage = new GameManager();
+manage.setupGame();
