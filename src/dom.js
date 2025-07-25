@@ -1,3 +1,5 @@
+const shipImages = require.context("./img", true, /\.(png|jpe?g|gif)$/);
+
 class DOMManager {
   constructor() {}
 
@@ -63,7 +65,10 @@ class DOMManager {
       // loop through xs
       for (let i = xStart; i <= xEnd; i++) {
         const square = this._getSquare(target, i, yStart);
-        square.style.backgroundImage = `url("/img/ship_${length}_rotated/image_part_00${partIndex}.jpg")`;
+        const imgPath = shipImages(
+          `./ship_${length}_rotated/image_part_00${partIndex}.jpg`,
+        );
+        square.style.backgroundImage = `url(${imgPath})`;
         square.style.backgroundSize = "cover";
         square.style.backgroundRepeat = "no-repeat";
         square.style.backgroundPosition = "center";
@@ -73,7 +78,10 @@ class DOMManager {
       // loop through ys
       for (let i = yStart; i <= yEnd; i++) {
         const square = this._getSquare(target, xStart, i);
-        square.style.backgroundImage = `url("/img/ship_${length}/image_part_00${partIndex}.jpg")`;
+        const imgPath = shipImages(
+          `./ship_${length}/image_part_00${partIndex}.jpg`,
+        );
+        square.style.backgroundImage = `url(${imgPath})`;
         square.style.backgroundSize = "cover";
         square.style.backgroundRepeat = "no-repeat";
         square.style.backgroundPosition = "center";
@@ -89,10 +97,13 @@ class DOMManager {
 
   updateSquare(target, row, col, hit) {
     const square = this._getSquare(target, row, col);
-    if (hit)
-      square.innerHTML = `<img src="/img/fire.gif" class="hit-overlay" />`;
-    else
-      square.innerHTML = `<img src="/img/water_hit.jpg" class="hit-overlay" />`;
+    if (hit) {
+      const fireGif = shipImages("./fire.gif");
+      square.innerHTML = `<img src="${fireGif}" class="hit-overlay" />`;
+    } else {
+      const waterImg = shipImages("./water_hit.jpg");
+      square.innerHTML = `<img src="${waterImg}" class="hit-overlay" />`;
+    }
   }
 
   displayWin(target) {
@@ -137,7 +148,7 @@ class DOMManager {
 
     for (let i = 1; i < 6; i++) {
       const horizontalImg = document.createElement("img");
-      horizontalImg.src = `/img/ship_${i}/ship_${i}_full.jpg`;
+      horizontalImg.src = shipImages(`./ship_${i}/ship_${i}_full.jpg`);
       horizontalImg.draggable = "true";
       horizontalImg.dataset.length = i;
       horizontalImg.dataset.orientation = "horizontal";
@@ -146,7 +157,7 @@ class DOMManager {
 
       if (i === 1) {
         const verticalImg = document.createElement("img");
-        verticalImg.src = `/img/ship_${i}/ship_${i}_full.jpg`;
+        verticalImg.src = shipImages(`./ship_${i}/ship_${i}_full.jpg`);
         verticalImg.draggable = "true";
         verticalImg.dataset.length = i;
         verticalImg.dataset.orientation = "vertical";
@@ -154,7 +165,7 @@ class DOMManager {
         verticalShips.appendChild(verticalImg);
       } else {
         const verticalImg = document.createElement("img");
-        verticalImg.src = `/img/ship_${i}_rotated/ship_${i}_full.jpg`;
+        verticalImg.src = shipImages(`./ship_${i}_rotated/ship_${i}_full.jpg`);
         verticalImg.draggable = "true";
         verticalImg.dataset.length = i;
         verticalImg.dataset.orientation = "vertical";
