@@ -12,13 +12,21 @@ class GameManager {
   }
 
   setupGame() {
-    this.dom.renderGameBoard(this.handleSquareClick, this.player);
+    this.dom.renderGameBoard(
+      this.handleSquareClick,
+      this._makePlayerShip.bind(this),
+      this.player,
+    );
     this._makePlayerShip(4, 6, 5, 5);
     this._makePlayerShip(1, 2, 5, 5);
     this._makePlayerShip(6, 9, 4, 4);
     this._makePlayerShip(5, 5, 2, 3);
     this._makePlayerShip(2, 2, 0, 4);
-    this.dom.renderGameBoard(this.handleSquareClick.bind(this), this.computer);
+    this.dom.renderGameBoard(
+      this.handleSquareClick.bind(this),
+      this._makePlayerShip,
+      this.computer,
+    );
     this._makeComputerShip(3, 3, 0, 4);
     this._makeComputerShip(0, 1, 5, 5);
     this._makeComputerShip(6, 9, 8, 8);
@@ -55,6 +63,10 @@ class GameManager {
       this.dom.displayWin(this.player);
     else if (target.gameboard.allSunk() && target.type === "player")
       this.dom.displayWin(this.computer);
+  }
+
+  setupGame2() {
+    this.dom.renderShipSelection();
   }
 
   _makePlayerShip(rowStart, rowEnd, colStart, colEnd) {
@@ -97,9 +109,8 @@ class GameManager {
   _getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
-
-  runGame() {}
 }
 
 const manage = new GameManager();
 manage.setupGame();
+manage.setupGame2();

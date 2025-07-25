@@ -1,7 +1,7 @@
 class DOMManager {
   constructor() {}
 
-  renderGameBoard(handleSquareClick, target) {
+  renderGameBoard(handleSquareClick, _makePlayerShip, target) {
     const mainContainer = document.getElementById("main-container");
     const gameContainer = document.createElement("div");
     gameContainer.classList.add("board");
@@ -15,8 +15,23 @@ class DOMManager {
         square.dataset.row = i;
         square.dataset.col = j;
         square.dataset.ship = false;
+
+        // event listener for clicking ship
         square.addEventListener("click", () => {
           if (target.type === "computer") handleSquareClick(i, j, target);
+        });
+        square.addEventListener("dragover", (e) => e.preventDefault());
+
+        // handle drop logic for when ship is placed
+        square.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const shipLength = parseInt(e.dataTransfer.getData("length"));
+          const orientation = e.dataTransfer.getData("orientation");
+          if (orientation === "horizontal")
+            _makePlayerShip(i, i, j, j + shipLength - 1);
+          else if (orientation === "vertical")
+            _makePlayerShip(i, i + shipLength - 1, j, j);
+          this._removeShipsOfLength(shipLength);
         });
         gameContainer.appendChild(square);
       }
@@ -66,7 +81,59 @@ class DOMManager {
   displayWin(target) {
     const winDiv = document.createElement("div");
     winDiv.innerHTML = `yay ${target.type} won`;
-    document.body.append(winDiv);
+    document.body.appendChild(winDiv);
+  }
+
+  renderShipSelection() {
+    const shipSelection = document.createElement("div");
+    shipSelection.id = "ship-selection";
+
+    const horizontalShips = document.createElement("div");
+    horizontalShips.id = "horizontal-ships";
+    const verticalShips = document.createElement("div");
+    verticalShips.id = "vertical-ships";
+
+    for (let i = 1; i < 6; i++) {
+      const horizontalImg = document.createElement("img");
+      horizontalImg.src = `/img/ship_${i}/ship_${i}_full.jpg`;
+      horizontalImg.draggable = "true";
+      horizontalImg.dataset.length = i;
+      horizontalImg.dataset.orientation = "horizontal";
+      horizontalImg.addEventListener("dragstart", this._handleDragStart);
+      horizontalShips.appendChild(horizontalImg);
+
+      if (i === 1) {
+        const verticalImg = document.createElement("img");
+        verticalImg.src = `/img/ship_${i}/ship_${i}_full.jpg`;
+        verticalImg.draggable = "true";
+        verticalImg.dataset.length = i;
+        verticalImg.dataset.orientation = "vertical";
+        verticalImg.addEventListener("dragstart", this._handleDragStart);
+        verticalShips.appendChild(verticalImg);
+      } else {
+        const verticalImg = document.createElement("img");
+        verticalImg.src = `/img/ship_${i}_rotated/ship_${i}_full.jpg`;
+        verticalImg.draggable = "true";
+        verticalImg.dataset.length = i;
+        verticalImg.dataset.orientation = "vertical";
+        verticalImg.addEventListener("dragstart", this._handleDragStart);
+        verticalShips.appendChild(verticalImg);
+      }
+    }
+    shipSelection.append(horizontalShips, verticalShips);
+    document.body.appendChild(shipSelection);
+  }
+
+  _handleDragStart(e) {
+    e.dataTransfer.setData("length", e.target.dataset.length);
+    e.dataTransfer.setData("orientation", e.target.dataset.orientation);
+  }
+
+  _removeShipsOfLength(length) {
+    for (let i = 0; i < 2; i++) {
+      const ship = document.querySelector(`[data-length="${length}"]`);
+      if (ship) ship.parentNode.removeChild(ship);
+    }
   }
 }
 

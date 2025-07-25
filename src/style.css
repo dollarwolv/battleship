@@ -31,3 +31,34 @@ body {
   height: 100%;
   pointer-events: none; /* click goes through the fire image */
 }
+
+#ship-selection {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  gap: 20px;
+}
+
+#horizontal-ships {
+  display: flex;
+  flex-direction: column;
+}
+
+#vertical-ships {
+  display: flex;
+  flex-direction: row;
+}
+
+#vertical-ships > img {
+  width: 50px;
+  height: auto;
+  display: block;
+  margin: auto 0;
+}
+
+#horizontal-ships > img {
+  height: 50px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
