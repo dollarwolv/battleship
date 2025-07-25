@@ -9,60 +9,50 @@ class GameManager {
     this.player = new Player("player");
     this.computer = new Player("computer");
     this.dom = new DOMManager();
-  }
-
-  setupGame() {
-    this.dom.renderGameBoard(
-      this.handleSquareClick,
-      this._makePlayerShip.bind(this),
-      this.player,
-    );
-    this._makePlayerShip(4, 6, 5, 5);
-    this._makePlayerShip(1, 2, 5, 5);
-    this._makePlayerShip(6, 9, 4, 4);
-    this._makePlayerShip(5, 5, 2, 3);
-    this._makePlayerShip(2, 2, 0, 4);
-    this.dom.renderGameBoard(
-      this.handleSquareClick.bind(this),
-      this._makePlayerShip,
-      this.computer,
-    );
-    this._makeComputerShip(3, 3, 0, 4);
-    this._makeComputerShip(0, 1, 5, 5);
-    this._makeComputerShip(6, 9, 8, 8);
-    this._makeComputerMove();
+    this.won = false;
+    this.currentTurn = "player";
   }
 
   handleSquareClick(row, col, target) {
-    const hit = target.gameboard.receiveAttack(row, col);
-    const [isHit, isSunk, location] = hit;
+    if (this.won) return;
+    console.log(this.currentTurn + target.type);
+    if (this.currentTurn !== target.type) {
+      const hit = target.gameboard.receiveAttack(row, col);
+      const [isHit, isSunk, location] = hit;
 
-    // update square to show hit marker
-    this.dom.updateSquare(target, row, col, isHit);
+      // update square to show hit marker
+      this.dom.updateSquare(target, row, col, isHit);
 
-    // render ship if whole ship was sunk
-    if (isSunk && target.type === "computer") {
-      const [rowStart, rowEnd, colStart, colEnd] = location;
-      this.dom.renderShip(
-        rowStart,
-        rowEnd,
-        colStart,
-        colEnd,
-        this.player.gameboard._calculateShipLength(
+      // render ship if whole ship was sunk
+      if (isSunk && target.type === "computer") {
+        const [rowStart, rowEnd, colStart, colEnd] = location;
+        this.dom.renderShip(
           rowStart,
           rowEnd,
           colStart,
           colEnd,
-        ),
-        target,
-      );
-    }
+          this.player.gameboard._calculateShipLength(
+            rowStart,
+            rowEnd,
+            colStart,
+            colEnd,
+          ),
+          target,
+        );
+      }
+      this.move += 1;
+      this._checkWin(target);
 
-    // win logic
-    if (target.gameboard.allSunk() && target.type === "computer")
-      this.dom.displayWin(this.player);
-    else if (target.gameboard.allSunk() && target.type === "player")
-      this.dom.displayWin(this.computer);
+      if (!this.won) {
+        this.currentTurn = "computer";
+        setTimeout(() => {
+          this._makeComputerMove();
+        }, 800);
+      }
+    } else {
+      console.log("rip");
+      return;
+    }
   }
 
   setupGame2() {
@@ -106,19 +96,25 @@ class GameManager {
   }
 
   _makeComputerMove() {
-    const row = this._getRandomInt(9);
-    const col = this._getRandomInt(9);
+    const row = this._getRandomInt(10);
+    const col = this._getRandomInt(10);
 
     if (
-      !this.computer.gameboard.hitSquares.some(
+      !this.player.gameboard.hitSquares.some(
         (coord) => coord[0] === row && coord[1] === col,
       )
     ) {
       setTimeout(
-        this.handleSquareClick(row, col, this.player),
-        Math.random() * 5000,
+        () => {
+          this.handleSquareClick(row, col, this.player);
+          this.currentTurn = "player";
+        },
+        Math.random() * 1000 + 500,
       );
-    } else this._makeComputerMove();
+    } else {
+      console.log("accidentally shot the same square oops");
+      this._makeComputerMove();
+    }
   }
 
   _getRandomInt(max) {
@@ -158,6 +154,13 @@ class GameManager {
           }
         }
       }
+    }
+  }
+
+  _checkWin(target) {
+    if (target.gameboard.allSunk()) {
+      this.won = true;
+      this.dom.displayWin(target === this.player ? this.computer : this.player);
     }
   }
 }
