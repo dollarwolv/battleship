@@ -13,6 +13,10 @@ class Gameboard {
     // copy the board
     const boardCopy = this.board.map((row) => [...row]);
 
+    if (endX > 9 || endY > 9) {
+      throw new Error("Ships cannot be placeed out of bounds.");
+    }
+
     // test if size is acceptable
     if (startX - endX !== 0) {
       if (startY - endY !== 0) {

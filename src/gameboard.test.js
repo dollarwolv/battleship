@@ -45,6 +45,13 @@ test("Gameboard does not allow ships to be placed over one another", () => {
   expect(gameboard.ships.length).toBe(1);
 });
 
+test("Gameboard does not allow ships to be placed out of bounds", () => {
+  const gameboard = new Gameboard();
+  expect(() => {
+    gameboard.placeShip(5, 5, 9, 12);
+  }).toThrow("Ships cannot be placeed out of bounds.");
+});
+
 test("Gameboard sends hit to the correct ship", () => {
   const gameboard = new Gameboard();
   gameboard.placeShip(2, 4, 4, 4);

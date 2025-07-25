@@ -11,11 +11,11 @@ class GameManager {
     this.dom = new DOMManager();
     this.won = false;
     this.currentTurn = "player";
+    this.setupGame();
   }
 
   handleSquareClick(row, col, target) {
     if (this.won) return;
-    console.log(this.currentTurn + target.type);
     if (this.currentTurn !== target.type) {
       const hit = target.gameboard.receiveAttack(row, col);
       const [isHit, isSunk, location] = hit;
@@ -50,12 +50,11 @@ class GameManager {
         }, 800);
       }
     } else {
-      console.log("rip");
       return;
     }
   }
 
-  setupGame2() {
+  setupGame() {
     this.dom.renderGameBoard(
       this.handleSquareClick.bind(this),
       this._makePlayerShip.bind(this),
@@ -165,7 +164,4 @@ class GameManager {
   }
 }
 
-const manage = new GameManager();
-
-// manage.setupGame();
-manage.setupGame2();
+new GameManager();

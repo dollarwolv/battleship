@@ -27,11 +27,21 @@ class DOMManager {
           e.preventDefault();
           const shipLength = parseInt(e.dataTransfer.getData("length"));
           const orientation = e.dataTransfer.getData("orientation");
-          if (orientation === "horizontal")
-            _makePlayerShip(i, i, j, j + shipLength - 1);
-          else if (orientation === "vertical")
-            _makePlayerShip(i, i + shipLength - 1, j, j);
-          this._removeShipsOfLength(shipLength);
+          if (orientation === "horizontal") {
+            try {
+              _makePlayerShip(i, i, j, j + shipLength - 1);
+              this._removeShipsOfLength(shipLength);
+            } catch {
+              return;
+            }
+          } else if (orientation === "vertical") {
+            try {
+              _makePlayerShip(i, i + shipLength - 1, j, j);
+              this._removeShipsOfLength(shipLength);
+            } catch {
+              return;
+            }
+          }
         });
         gameContainer.appendChild(square);
       }
