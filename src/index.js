@@ -66,7 +66,21 @@ class GameManager {
   }
 
   setupGame2() {
+    this.dom.renderGameBoard(
+      this.handleSquareClick.bind(this),
+      this._makePlayerShip.bind(this),
+      this.player,
+    );
     this.dom.renderShipSelection();
+  }
+
+  startGame() {
+    this.dom.renderGameBoard(
+      this.handleSquareClick.bind(this),
+      this._makePlayerShip.bind(this),
+      this.computer,
+    );
+    this._placeRandomComputerShips();
   }
 
   _makePlayerShip(rowStart, rowEnd, colStart, colEnd) {
@@ -84,6 +98,7 @@ class GameManager {
       ),
       this.player,
     );
+    if (this.player.gameboard.numberOfShips === 5) this.startGame();
   }
 
   _makeComputerShip(rowStart, rowEnd, colStart, colEnd) {
@@ -109,8 +124,45 @@ class GameManager {
   _getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+  _placeRandomComputerShips() {
+    for (let i = 0; i < 5; i++) {
+      let horizontal = this._getRandomInt(2) === 0;
+      let placed = false;
+      if (horizontal) {
+        while (!placed) {
+          try {
+            const rowStart = this._getRandomInt(4);
+            const rowEnd = rowStart + i;
+            const random = this._getRandomInt(10);
+            const colStart = random;
+            const colEnd = random;
+            this._makeComputerShip(rowStart, rowEnd, colStart, colEnd);
+            placed = true;
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      } else {
+        while (!placed) {
+          try {
+            const random = this._getRandomInt(10);
+            const rowStart = random;
+            const rowEnd = random;
+            const colStart = this._getRandomInt(4);
+            const colEnd = colStart + i;
+            this._makeComputerShip(rowStart, rowEnd, colStart, colEnd);
+            placed = true;
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      }
+    }
+  }
 }
 
 const manage = new GameManager();
-manage.setupGame();
+
+// manage.setupGame();
 manage.setupGame2();
