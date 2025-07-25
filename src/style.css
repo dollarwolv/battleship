@@ -1,7 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "Permanent Marker", cursive;
 }
 #main-container {
   display: flex;
@@ -16,11 +19,10 @@ body {
 }
 
 .square {
-  /* width: 20px;
-  height: 20px; */
   position: relative;
   box-sizing: border-box;
   border: 1px solid black;
+  background-color: #b4b4b4;
 }
 
 .square .hit-overlay {
@@ -61,4 +63,49 @@ body {
   width: auto;
   display: block;
   margin: 0 auto;
+}
+
+#parent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+#close-modal {
+  cursor: pointer;
+}
+
+#win-modal .modal-content {
+  max-width: 300px;
+}
+#win-modal h2 {
+  margin: 0;
 }

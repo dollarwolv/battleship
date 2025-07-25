@@ -7,6 +7,28 @@
   </head>
   <body>
     <h1>Battleship</h1>
+    <div id="game-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>Welcome to Battleship!</h2>
+        <p>
+          Drag and drop each of your five ships onto your grid. When all ships
+          are placed, the game begins automatically. Then take turns firing
+          shots against a (very dumb) computer until one of you sinks all the
+          opponent’s ships.
+        </p>
+      </div>
+    </div>
     <div id="main-container"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("game-modal");
+        const closeBtn = document.getElementById("close-modal");
+
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+      });
+    </script>
   </body>
 </html>

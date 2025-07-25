@@ -3,9 +3,16 @@ class DOMManager {
 
   renderGameBoard(handleSquareClick, _makePlayerShip, target) {
     const mainContainer = document.getElementById("main-container");
+    const parentDiv = document.createElement("div");
+    parentDiv.id = "parent";
+    mainContainer.appendChild(parentDiv);
     const gameContainer = document.createElement("div");
     gameContainer.classList.add("board");
     gameContainer.id = `${target.type}-container`;
+
+    const nameContainer = document.createElement("h3");
+    nameContainer.textContent = target.type;
+    parentDiv.appendChild(nameContainer);
 
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
@@ -47,7 +54,7 @@ class DOMManager {
       }
     }
 
-    mainContainer.append(gameContainer);
+    parentDiv.append(gameContainer);
   }
 
   renderShip(xStart, xEnd, yStart, yEnd, length, target) {
@@ -89,9 +96,34 @@ class DOMManager {
   }
 
   displayWin(target) {
-    const winDiv = document.createElement("div");
-    winDiv.innerHTML = `yay ${target.type} won`;
-    document.body.appendChild(winDiv);
+    // Remove any existing win modal
+    const existing = document.getElementById("win-modal");
+    if (existing) existing.remove();
+
+    // Build a new modal overlay
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.id = "win-modal";
+
+    const content = document.createElement("div");
+    content.classList.add("modal-content");
+
+    const closeBtn = document.createElement("span");
+    closeBtn.classList.add("close");
+    closeBtn.textContent = "×";
+
+    const header = document.createElement("h2");
+    header.textContent =
+      target.type === "player" ? "You won!" : "Computer won!";
+
+    content.append(closeBtn, header);
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // Dismiss modal on close button click
+    closeBtn.addEventListener("click", () => {
+      modal.remove();
+    });
   }
 
   renderShipSelection() {
